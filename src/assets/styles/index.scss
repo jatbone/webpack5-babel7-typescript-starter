@@ -1,0 +1,56 @@
+@import-normalize;
+
+html,
+body {
+  width: 100%;
+  font-size: 100%;
+  font-family: 'Roboto', 'Helvetica Neu', Helvetica, Arial, sans-serif;
+  font-weight: lighter;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100%;
+  line-height: normal;
+  font-size: 16px;
+  direction: ltr;
+  font-feature-settings: 'kern';
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+}
+
+h1 {
+  margin: 0;
+}
+
+.App {
+  width: 100%;
+  & > header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid lightblue;
+    padding: 20px;
+    background-color: aliceblue;
+    display: flex;
+    align-items: center;
+    & > h1 {
+      font-size: 32px;
+      color: darkgray;
+    }
+    .logo-wrapper {
+      display: block;
+      text-decoration: none;
+      width: 40px;
+      margin-right: 20px;
+      & > img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ const publicPath = '/'
 const cssRegex = /\.css$/
 const sassRegex = /\.(scss|sass)$/
 const useTypeScript = fs.existsSync(paths.appTsConfig)
+const browser = 'Google Chrome Dev'
 
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
@@ -72,8 +73,8 @@ const config = {
   devServer: isDev
     ? {
         historyApiFallback: true,
-        contentBase: paths.buildDir,
-        open: true,
+        contentBase: paths.publicDir,
+        open: browser,
         compress: true,
         hot: true,
         port: 8080,

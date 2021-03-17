@@ -29,7 +29,9 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`)
 }
 
-const pages = { index: 'index', about: 'index' }
+// html template -> js file (chunk)
+// const pages = { index: 'index', about: 'index' }
+const pages = { index: 'index' }
 
 const jsFile = Object.keys(pages).reduce(
   (prev, page) => ({

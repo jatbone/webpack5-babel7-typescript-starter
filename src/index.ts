@@ -17,3 +17,16 @@ console.log(Object.values(obj))
 console.log([1, 2].includes(1))
 
 console.log(r)
+
+const p = new Promise<string>((res, rej) => {
+  if (res) {
+    return res('ok')
+  }
+  return rej('no ok')
+})
+p.then((res) => res).catch((err) => err)
+
+console.log(p)
+
+const setTest = new Set([1, 2, 3, 2, 1])
+console.log(setTest)

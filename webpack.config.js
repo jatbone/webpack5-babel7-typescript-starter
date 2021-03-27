@@ -53,7 +53,13 @@ const config = {
   bail: !isDev,
   mode: isDev ? 'development' : 'production',
   devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
-  entry: paths.jsFile,
+  entry: Object.keys(paths.files).reduce(
+    (prev, page) => ({
+      ...prev,
+      [page]: paths.files[page].js,
+    }),
+    {}
+  ),
   output: {
     // The build folder.
     path: !isDev ? paths.buildDir : undefined,
@@ -122,7 +128,7 @@ const config = {
         },
       }),
     ],
-    runtimeChunk: 'single',
+    // runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
         vendor: {
@@ -223,7 +229,7 @@ const config = {
 
   plugins: [
     !isDev && new CleanWebpackPlugin(),
-    ...paths.htmlFile.map(
+    ...Object.values(paths.files).map(
       (obj) =>
         new HtmlWebpackPlugin(
           Object.assign(
@@ -231,7 +237,7 @@ const config = {
             {
               inject: true,
               template: obj.template,
-              filename: obj.filename,
+              filename: obj.html,
               chunks: [obj.chunk],
             },
             !isDev

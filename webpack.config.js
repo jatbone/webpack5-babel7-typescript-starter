@@ -175,10 +175,6 @@ const config = {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
             include: paths.srcDir,
             loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              cacheDirectory: true,
-            },
           },
           // Process any JS outside of the app with Babel.
           // Unlike the application JS, we only compile the standard ES features.

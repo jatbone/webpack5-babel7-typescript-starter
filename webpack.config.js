@@ -16,7 +16,8 @@ const publicPath = '/'
 const cssRegex = /\.css$/
 const sassRegex = /\.(scss|sass)$/
 const useTypeScript = fs.existsSync(paths.appTsConfig)
-const browser = 'Google Chrome Dev'
+// const browser = 'Google Chrome Dev'
+const devPort = 3000
 
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
@@ -49,17 +50,47 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
   return loaders
 }
 
+const entries = Object.keys(paths.files).reduce(
+  (prev, page) => ({
+    ...prev,
+    [page]: paths.files[page].js,
+  }),
+  {}
+)
+
+const htmlWebpackPluginItems = Object.values(paths.files).map((obj) =>
+  Object.assign(
+    {},
+    {
+      inject: true,
+      template: obj.template,
+      filename: obj.html,
+      chunks: [obj.chunk],
+    },
+    !isDev
+      ? {
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true,
+            removeEmptyAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            keepClosingSlash: true,
+            minifyJS: true,
+            minifyCSS: true,
+            minifyURLs: true,
+          },
+        }
+      : undefined
+  )
+)
+
 const config = {
   bail: !isDev,
   mode: isDev ? 'development' : 'production',
   devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
-  entry: Object.keys(paths.files).reduce(
-    (prev, page) => ({
-      ...prev,
-      [page]: paths.files[page].js,
-    }),
-    {}
-  ),
+  entry: entries,
   output: {
     // The build folder.
     path: !isDev ? paths.buildDir : undefined,
@@ -80,10 +111,11 @@ const config = {
     ? {
         historyApiFallback: true,
         contentBase: paths.publicDir,
-        open: browser,
+        // open: browser,
+        open: false,
         compress: true,
         hot: true,
-        port: 8080,
+        port: devPort,
       }
     : undefined,
 
@@ -225,36 +257,7 @@ const config = {
 
   plugins: [
     !isDev && new CleanWebpackPlugin(),
-    ...Object.values(paths.files).map(
-      (obj) =>
-        new HtmlWebpackPlugin(
-          Object.assign(
-            {},
-            {
-              inject: true,
-              template: obj.template,
-              filename: obj.html,
-              chunks: [obj.chunk],
-            },
-            !isDev
-              ? {
-                  minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true,
-                  },
-                }
-              : undefined
-          )
-        )
-    ),
+    ...htmlWebpackPluginItems.map((config) => new HtmlWebpackPlugin(config)),
     !isDev &&
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
